@@ -6,14 +6,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const urlStore = {}; // { shortcode: { url, expiry, createdAt, clicks: [] } }
+const urlStore = {};
 
-// Helper to generate shortcode
 function generateCode() {
   return Math.random().toString(36).substring(2, 8); // simple 6-char code
 }
 
-// POST /shorturls → Create Short URL
 app.post('/shorturls', async (req, res) => {
   const { url, validity, shortcode } = req.body;
 
@@ -45,7 +43,6 @@ app.post('/shorturls', async (req, res) => {
   });
 });
 
-// GET /shorturls/:code → Get stats
 app.get('/shorturls/:code', async (req, res) => {
   const code = req.params.code;
   const data = urlStore[code];
@@ -64,7 +61,7 @@ app.get('/shorturls/:code', async (req, res) => {
   });
 });
 
-// GET /:code → Redirect
+
 app.get('/:code', async (req, res) => {
   const code = req.params.code;
   const data = urlStore[code];
@@ -88,7 +85,7 @@ app.get('/:code', async (req, res) => {
   return res.redirect(data.url);
 });
 
-// Start server
+
 app.listen(3000, () => {
   console.log('✅ Server running at http://localhost:3000');
 });
